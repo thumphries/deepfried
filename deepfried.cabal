@@ -26,9 +26,13 @@ executable deepfried
                      , bytestring           == 0.10.*
                      , conduit              == 1.2.*
                      , gd                   == 3000.7.*
+                     , http-client          == 0.4.*
+                     , http-conduit         == 2.1.*
                      , lens
                      , random
                      , resourcet
                      , text                 == 1.2.*
                      , twitter-conduit      == 0.2.*
+                     , twitter-types        == 0.7.*
+                     , twitter-types-lens   == 0.7.*
 

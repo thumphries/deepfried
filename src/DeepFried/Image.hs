@@ -1,7 +1,8 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module DeepFried.Image (
-    deepfry
+    deepfryFile
+  , deepfryBS
   ) where
 
 
@@ -13,8 +14,8 @@ import           System.IO
 import           System.Random
 
 
-deepfry :: FilePath -> IO FilePath
-deepfry input = do
+deepfryFile :: FilePath -> IO FilePath
+deepfryFile input = do
   (out, h) <- openBinaryTempFileWithDefaultPermissions "/tmp" "deepfried.jpg"
 
   withImage (loadJpegFile input) $ \image -> do
@@ -23,6 +24,12 @@ deepfry input = do
 
   hClose h
   pure out
+
+deepfryBS :: ByteString -> IO ByteString
+deepfryBS bs = do
+  withImage (loadJpegByteString bs) $ \image -> do
+    fried <- fry image
+    saveJpegByteString 70 fried
 
 fry :: Image -> IO Image
 fry i = do
