@@ -21,9 +21,9 @@ main = orDie renderDeepFriedError $ do
   let twInfo = setCredential oauth creds def
   mgr <- liftIO (newManager tlsManagerSettings)
 
-  -- printUserstream twInfo mgr
+  printUserstream twInfo mgr
   -- printTracking twInfo mgr "Haskell"
 
-  favMentions twInfo mgr "@deepfrybot"
+  -- favMentions twInfo mgr "@deepfrybot"
 
   pure ()

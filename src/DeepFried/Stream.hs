@@ -41,9 +41,14 @@ favStream twInfo mgr event = case event of
   SStatus s -> do
     let user = userScreenName (statusUser s)
         reply = ".@" <> user
-    f <- liftIO $ call twInfo mgr (favoritesCreate (statusId s))
-    s <- liftIO $ call twInfo mgr (updateWithMedia reply (MediaFromFile "/tmp/sponge.jpg") & inReplyToStatusId ?~ (statusId s))
-    print f
+    _ <- liftIO $ call twInfo mgr (favoritesCreate (statusId s))
+    _ <- liftIO $ call twInfo mgr (updateWithMedia reply (MediaFromFile "/tmp/sponge.jpg") & inReplyToStatusId ?~ (statusId s))
+    pure ()
   _ ->
     pure ()
 
+-- grabbing images:
+--   statusEntities :: Maybe Entities
+--     enMedia :: []
+--       entityBody (case, MediaBody)
+--         meMediaURLHttps :: Text
