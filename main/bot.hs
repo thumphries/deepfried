@@ -4,7 +4,7 @@
 
 import           BasicPrelude hiding (first)
 
--- import           Control.Concurrent
+import           Control.Concurrent
 
 import           DeepFried.Env
 import           DeepFried.Error
@@ -24,5 +24,5 @@ main = orDie renderDeepFriedError $ do
   mgr <- liftIO (newManager tlsManagerSettings)
 
   -- FIX squash exceptions and run in a loop
-  -- _ <- liftIO . forkIO $ favTrack twInfo mgr ["deep fried meme"]
+  _ <- liftIO . forkIO $ favTrack twInfo mgr ["deep fried memes", "deep fried meme"]
   liftIO $ fryMentions twInfo mgr "deepfrybot" -- FIX

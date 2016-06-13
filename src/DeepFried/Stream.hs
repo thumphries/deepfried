@@ -60,6 +60,7 @@ fryMentions twInfo mgr uname = onMentions twInfo mgr uname $ \sapi -> do
     SStatus s -> do
       let usern = s ^. statusUser ^. userScreenName
           reply = "@" <> usern
+          noLoop = if usern == uname then Nothing else Just usern
       maybe
         (pure ())
         (\r -> do
@@ -69,7 +70,7 @@ fryMentions twInfo mgr uname = onMentions twInfo mgr uname $ \sapi -> do
             $ updateWithMedia reply (MediaRequestBody "fried.jpg" (RequestBodyBS fried))
               & inReplyToStatusId ?~ (s ^. statusId)
           liftIO $ print (s2 ^. statusId))
-        (statusMedia s >>= listToMaybe >>= parseUrl . T.unpack)
+        (noLoop >> statusMedia s >>= listToMaybe >>= parseUrl . T.unpack)
     _ ->
       pure ()
 
