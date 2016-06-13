@@ -22,6 +22,10 @@ executable deepfried
   build-depends:       base                 >= 4.8     && <4.9
                      , ambiata-x-eithert
                      , basic-prelude        == 0.5.*
-                     , resourcet            == 0.3.*
+                     , bytestring           == 0.10.*
+                     , conduit              == 1.2.*
+                     , lens
+                     , resourcet
+                     , text                 == 1.2.*
                      , twitter-conduit      == 0.2.*
 

@@ -18,9 +18,12 @@ main :: IO ()
 main = orDie renderDeepFriedError $ do
   oauth <- firstEitherT EnvError oauthEnv
   creds <- firstEitherT EnvError credsEnv
-  let twinfo = setCredential oauth creds def
+  let twInfo = setCredential oauth creds def
   mgr <- liftIO (newManager tlsManagerSettings)
 
-  printUserstream twinfo mgr
+  -- printUserstream twInfo mgr
+  -- printTracking twInfo mgr "Haskell"
+
+  favMentions twInfo mgr "@deepfrybot"
 
   pure ()
