@@ -17,6 +17,7 @@ executable deepfried
 
   other-modules:
                        DeepFried.Env
+                       DeepFried.Image
                        DeepFried.Stream
 
   build-depends:       base                 >= 4.8     && <4.9
@@ -24,7 +25,9 @@ executable deepfried
                      , basic-prelude        == 0.5.*
                      , bytestring           == 0.10.*
                      , conduit              == 1.2.*
+                     , gd                   == 3000.7.*
                      , lens
+                     , random
                      , resourcet
                      , text                 == 1.2.*
                      , twitter-conduit      == 0.2.*

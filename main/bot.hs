@@ -7,6 +7,7 @@ import           BasicPrelude hiding (first)
 import           DeepFried.Env
 import           DeepFried.Error
 import           DeepFried.Stream
+import           DeepFried.Image
 
 import           Web.Twitter.Conduit
 
