@@ -1,0 +1,3 @@
+[submodule "lib/x"]
+	path = lib/x
+	url = https://github.com/ambiata/x
