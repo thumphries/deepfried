@@ -61,13 +61,14 @@ fryMentions twInfo mgr uname = onMentions twInfo mgr uname $ \sapi -> do
       let usern = s ^. statusUser ^. userScreenName
           reply = "@" <> usern
           noLoop = if usern == uname then Nothing else Just usern
+          text fs = T.unwords [reply, renderFryScore fs]
       maybe
         (pure ())
         (\r -> do
           image <- liftM (LB.toStrict . getResponseBody) (httpLBS r)
-          fried <- liftIO (deepfryBS image)
+          (fried, score) <- liftIO (deepfryBS image)
           s2 <- liftIO . call twInfo mgr
-            $ updateWithMedia reply (MediaRequestBody "fried.jpg" (RequestBodyBS fried))
+            $ updateWithMedia (text score) (MediaRequestBody "fried.jpg" (RequestBodyBS fried))
               & inReplyToStatusId ?~ (s ^. statusId)
           liftIO $ print (s2 ^. statusId))
         (noLoop >> statusMedia s >>= listToMaybe >>= parseUrl . T.unpack)

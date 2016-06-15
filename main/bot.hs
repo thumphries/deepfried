@@ -6,6 +6,8 @@ import           BasicPrelude hiding (first)
 
 import           Control.Concurrent
 
+import qualified Data.Text.IO as T
+
 import           DeepFried.Env
 import           DeepFried.Error
 import           DeepFried.Stream
@@ -23,6 +25,9 @@ main = orDie renderDeepFriedError $ do
   let twInfo = setCredential oauth creds def
   mgr <- liftIO (newManager tlsManagerSettings)
 
+  liftIO $ T.putStrLn "deepfried starting"
+
   -- FIX squash exceptions and run in a loop
   _ <- liftIO . forkIO $ favTrack twInfo mgr ["deep fried memes", "deep fried meme"]
-  liftIO $ fryMentions twInfo mgr "deepfrybot" -- FIX
+  -- FIX should be able to get screen name via API
+  liftIO $ fryMentions twInfo mgr "deepfrybot"

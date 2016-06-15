@@ -3,6 +3,8 @@
 module DeepFried.Image (
     deepfryFile
   , deepfryBS
+  , FryScore (..)
+  , renderFryScore
   ) where
 
 
@@ -14,27 +16,48 @@ import           System.IO
 import           System.Random
 
 
-deepfryFile :: FilePath -> IO FilePath
+data FryScore
+  = Legible Int
+  | GoldenBrown Int
+  | Crispy Int
+  deriving (Eq, Show)
+
+fryScore :: Int -> FryScore
+fryScore i
+  | i <= 40 = Legible i
+  | i <= 70 = GoldenBrown i
+  | otherwise = Crispy i
+
+renderFryScore :: FryScore -> Text
+renderFryScore f = case f of
+  Legible i -> "still legible! [" <> show i <> "]"
+  GoldenBrown i -> "i cook it golden brown [" <> show i <> "]"
+  Crispy i -> "crispy [" <> show i <> "]"
+
+deepfryFile :: FilePath -> IO (FilePath, FryScore)
 deepfryFile input = do
   (out, h) <- openBinaryTempFileWithDefaultPermissions "/tmp" "deepfried.jpg"
 
-  withImage (loadJpegFile input) $ \image -> do
-    fried <- fry image
+  s <- withImage (loadJpegFile input) $ \image -> do
+    (fried, s) <- fry image
     saveJpegFile (-1) out fried
+    pure s
 
   hClose h
-  pure out
+  pure (out, s)
 
-deepfryBS :: ByteString -> IO ByteString
+deepfryBS :: ByteString -> IO (ByteString, FryScore)
 deepfryBS bs = do
   withImage (loadJpegByteString bs) $ \image -> do
-    fried <- fry image
-    saveJpegByteString 70 fried
+    (fried, s) <- fry image
+    bs <- saveJpegByteString 70 fried
+    pure (bs, s)
 
-fry :: Image -> IO Image
+fry :: Image -> IO (Image, FryScore)
 fry i = do
-  iterations <- randomRIO (30, 100)
-  iterateM iterations viaJpegRandomResize i
+  iterations <- randomRIO (20, 80)
+  i <- iterateM iterations viaJpegRandomResize i
+  pure (i, fryScore iterations)
 
 viaJpegRandomResize :: Image -> IO Image
 viaJpegRandomResize i = do
